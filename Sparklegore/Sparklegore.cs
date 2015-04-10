@@ -1,7 +1,8 @@
 ﻿#region Contributors
 /* Authors:
  * - Michael Berger
- * - 
+ * - Luke Hedrick
+ * -
  */
 #endregion
 
