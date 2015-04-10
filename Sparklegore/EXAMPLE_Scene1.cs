@@ -38,6 +38,23 @@ namespace Project2_FinalFramework
             listWalls.Add(new EXAMPLE_Wall(464, 300, t2d_Wall, 32, 32));
             listWalls.Add(new EXAMPLE_Wall(400, 364, t2d_Wall, 32, 32));
             listWalls.Add(new EXAMPLE_Wall(336, 300, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(100, 100, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(132, 100, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(164, 100, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(196, 100, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(228, 100, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(132, 132, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(196, 132, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(132, 164, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(196, 164, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(132, 196, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(196, 196, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(100, 228, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(132, 228, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(164, 228, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(196, 228, t2d_Wall, 32, 32));
+            listWalls.Add(new EXAMPLE_Wall(228, 228, t2d_Wall, 32, 32));
+
             enemy = new EXAMPLE_Enemy(600, 450, t2d_PlayerAndEnemy, 32, 32);
         }
 
