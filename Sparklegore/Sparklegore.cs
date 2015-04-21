@@ -1,11 +1,4 @@
-﻿#region Contributors
-/* Authors:
- * - Michael Berger
- * - 
- */
-#endregion
-
-#region Using Statements
+﻿#region Using Statements
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
