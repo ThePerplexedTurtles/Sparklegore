@@ -1,8 +1,7 @@
 ﻿#region Contributors
 /* Authors:
  * - Michael Berger
- * - Luke Hedrick
- * -
+ * - 
  */
 #endregion
 
@@ -28,6 +27,15 @@ namespace Project2_FinalFramework
     }
     //Enum "Screens" ends
 
+    //Menu enum
+    public enum Menus
+    {
+        Options,
+        Settings,
+        Controls,
+        Abilities,
+        Default
+    }
 
     //Class "Sparklegore" starts
     public class Sparklegore : Game
@@ -40,6 +48,23 @@ namespace Project2_FinalFramework
         private static KeyboardState stateKeyboardPrevious;
         private static MouseState stateMouseCurrent;
         private static MouseState stateMousePrevious;
+        public static Menus menuCurrent = Menus.Default;
+
+        //Luke's added mess
+        bool isPaused = true;
+        bool someBool = true;
+        Texture2D mainMenu;
+        Texture2D pauseMenu;
+        Scene_MainMenu mMenu;
+        SpriteFont font;
+        Texture2D options;
+        Texture2D settings;
+        Texture2D abilities;
+        Texture2D controls;
+        Texture2D gameOver;
+        Rectangle visibleScreen = new Rectangle(0, 0, 800, 600);
+        bool onMain = true;
+        bool isDead = false;
 
         //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
         EXAMPLE_Scene1 testScene;
@@ -72,7 +97,7 @@ namespace Project2_FinalFramework
 
             testScene = new EXAMPLE_Scene1(this.Content);
             //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
-
+            mMenu = new Scene_MainMenu(this.Content);
 
             base.Initialize();
         }
@@ -84,7 +109,15 @@ namespace Project2_FinalFramework
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-
+            //Luke's added mess
+            mainMenu = this.Content.Load<Texture2D>("TitleScreen");
+            pauseMenu = this.Content.Load<Texture2D>("Possible menu style1");
+            font = this.Content.Load<SpriteFont>("font1");
+            controls = this.Content.Load<Texture2D>("Controls");
+            abilities = this.Content.Load<Texture2D>("Abilities");
+            settings = this.Content.Load<Texture2D>("Settings");
+            options = this.Content.Load<Texture2D>("Options");
+            gameOver = this.Content.Load<Texture2D>("GameOver");
         }
 
         //UnloadContent()
@@ -103,10 +136,173 @@ namespace Project2_FinalFramework
             stateKeyboardCurrent = Keyboard.GetState();
             stateMouseCurrent = Mouse.GetState();
 
-            //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
-            testScene.Update(gameTime);
-            testScene.DetectCollisions();
-            //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
+            //QUICK ESCAPE
+            if (stateKeyboardCurrent.IsKeyDown(Keys.Space))
+            {
+                Exit();
+            }
+
+            if(testScene.IsDead == true)
+            {
+                screenCurrent = Scenes.GameOver;
+            }
+
+            //Luke's added mess
+            mMenu.Update(gameTime);
+
+            //Main menu navigation
+            if (screenCurrent == Scenes.MainMenu)
+            {
+                //Play button
+                if (stateMouseCurrent.Y >= 394 && stateMouseCurrent.Y <= 429 && stateMouseCurrent.X >= 334 && stateMouseCurrent.X <= 446 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released)
+                {
+                    if (menuCurrent == Menus.Default)
+                    {
+                        isPaused = false;
+                        IsMouseVisible = false;
+                        onMain = true;
+                        screenCurrent = Scenes.Game;
+                    }
+                    else
+                    {
+                        onMain = true;
+                        menuCurrent = Menus.Default;
+                    }
+                }
+
+                //Options button
+                else if (stateMouseCurrent.Y >= 141 && stateMouseCurrent.Y <= 176 && stateMouseCurrent.X >= 347 && stateMouseCurrent.X <= 446 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
+                {
+                    onMain = false;
+                    menuCurrent = Menus.Options;
+                }
+
+                //Settings button
+                else if (stateMouseCurrent.Y >= 177 && stateMouseCurrent.Y <= 212 && stateMouseCurrent.X >= 348 && stateMouseCurrent.X <= 447 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
+                {
+                    onMain = false;
+                    menuCurrent = Menus.Settings;
+                }
+
+                //Controls button
+                else if (stateMouseCurrent.Y >= 212 && stateMouseCurrent.Y <= 247 && stateMouseCurrent.X >= 349 && stateMouseCurrent.X <= 448 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
+                {
+                    onMain = false;
+                    menuCurrent = Menus.Controls;
+                }
+
+                //Abilities button
+                else if (stateMouseCurrent.Y >= 247 && stateMouseCurrent.Y <= 282 && stateMouseCurrent.X >= 351 && stateMouseCurrent.X <= 455 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
+                {
+                    onMain = false;
+                    menuCurrent = Menus.Abilities;
+                }
+
+                //Quick Play
+                if (stateKeyboardCurrent.IsKeyDown(Keys.Enter))
+                {
+                    onMain = false;
+                    isPaused = false;
+                    screenCurrent = Scenes.Game;
+                }
+            }
+
+            if (screenCurrent == Scenes.Game)
+            {
+                //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
+                if (isPaused == false)
+                {
+                    testScene.Update(gameTime);
+                    testScene.DetectCollisions();
+                }
+                //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
+
+
+                //pause the game
+                if (isPaused == false && stateKeyboardCurrent.IsKeyDown(Keys.P) && !stateKeyboardPrevious.IsKeyDown(Keys.P))
+                {
+                    someBool = false;
+                }
+
+                //unpause the game: keyboard
+                if (isPaused == true && stateKeyboardCurrent.IsKeyDown(Keys.P) && !stateKeyboardPrevious.IsKeyDown(Keys.P))
+                {
+                    someBool = true;
+                }
+
+                //actually pauses the game
+                if (someBool == false && isPaused == false)
+                {
+                    isPaused = true;
+                    IsMouseVisible = true;
+                }
+
+                //actually unpauses the game
+                if (someBool == true && isPaused == true)
+                {
+                    isPaused = false;
+                    IsMouseVisible = false;
+                }
+
+                //mouse menu navigation
+                if (isPaused == true)
+                {
+                    //resumes game
+                    if (stateMouseCurrent.Y >= 394 && stateMouseCurrent.Y <= 429 && stateMouseCurrent.X >= 334 && stateMouseCurrent.X <= 446 && stateMouseCurrent.LeftButton == ButtonState.Pressed && !(stateMousePrevious.LeftButton == ButtonState.Pressed))
+                    {
+                        if (menuCurrent == Menus.Default)
+                        {
+                            isPaused = false;
+                            IsMouseVisible = false;
+                            someBool = true;
+                        }
+                        else
+                        {
+                            menuCurrent = Menus.Default;
+                        }
+                    }
+
+                    //Options submenu
+                    if (stateMouseCurrent.Y >= 145 && stateMouseCurrent.Y <= 175 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445 && stateMouseCurrent.LeftButton == ButtonState.Pressed)
+                    {
+                        menuCurrent = Menus.Options;
+                    }
+
+                    //Settings submenu
+                    if (stateMouseCurrent.Y >= 180 && stateMouseCurrent.Y <= 212 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445 && stateMouseCurrent.LeftButton == ButtonState.Pressed)
+                    {
+                        menuCurrent = Menus.Settings;
+                    }
+                    //Controls submenu
+                    if (stateMouseCurrent.Y >= 215 && stateMouseCurrent.Y <= 245 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445 && stateMouseCurrent.LeftButton == ButtonState.Pressed)
+                    {
+                        menuCurrent = Menus.Controls;
+                    }
+                    //Abilities submenu
+                    if (stateMouseCurrent.Y >= 250 && stateMouseCurrent.Y <= 280 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445 && stateMouseCurrent.LeftButton == ButtonState.Pressed)
+                    {
+                        menuCurrent = Menus.Abilities;
+                    }
+                }
+            }
+
+            //game over navigation
+            if(screenCurrent == Scenes.GameOver)
+            {
+                this.IsMouseVisible = true;
+                
+                if(stateMouseCurrent.Y >= 132 && stateMouseCurrent.Y <= 186 && stateMouseCurrent.X >= 266 && stateMouseCurrent.X <= 563 && stateMouseCurrent.LeftButton == ButtonState.Pressed)
+                {
+                    testScene.Startup();
+                    onMain = true;
+                    screenCurrent = Scenes.MainMenu;
+                    menuCurrent = Menus.Default;
+                }
+                else if (stateMouseCurrent.Y >= 245 && stateMouseCurrent.Y <= 299 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 470 && stateMouseCurrent.LeftButton == ButtonState.Pressed)
+                {
+                    Environment.Exit(0);
+                }
+            }
 
             //Setting the previous input states to what were the current states
             stateKeyboardPrevious = stateKeyboardCurrent;
@@ -125,7 +321,74 @@ namespace Project2_FinalFramework
 
             //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
             spriteBatch.Begin();
-            testScene.Draw(spriteBatch);
+            //Main Menu
+            if (screenCurrent == Scenes.MainMenu)
+            {
+                switch (menuCurrent)
+                {
+                    case Menus.Abilities:
+                        spriteBatch.Draw(abilities, visibleScreen, Color.White);
+                        break;
+                    case Menus.Controls:
+                        spriteBatch.Draw(controls, visibleScreen, Color.White);
+                        break;
+                    case Menus.Default:
+                        spriteBatch.Draw(mainMenu, visibleScreen, Color.White);
+                        break;
+                    case Menus.Options:
+                        spriteBatch.Draw(options, visibleScreen, Color.White);
+                        break;
+                    case Menus.Settings:
+                        spriteBatch.Draw(settings, visibleScreen, Color.White);
+                        break;
+                }
+            }
+            
+            //Game Screen
+            if (screenCurrent == Scenes.Game)
+            {
+                //check if paused
+                if (isPaused == true)
+                {
+                    switch (menuCurrent)
+                    {
+                        case Menus.Abilities:
+                            spriteBatch.Draw(abilities, visibleScreen, Color.White);
+                            break;
+                        case Menus.Controls:
+                            spriteBatch.Draw(controls, visibleScreen, Color.White);
+                            break;
+                        case Menus.Default:
+                            //draw paused screen
+                            spriteBatch.Draw(pauseMenu, visibleScreen, Color.White);
+                            spriteBatch.DrawString(font, "Can Currently Only", new Vector2(50, 50), Color.White);
+                            spriteBatch.DrawString(font, "Look At All Menus", new Vector2(50, 70), Color.White);
+                            break;
+                        case Menus.Options:
+                            spriteBatch.Draw(options, visibleScreen, Color.White);
+                            break;
+                        case Menus.Settings:
+                            spriteBatch.Draw(settings, visibleScreen, Color.White);
+                            break;
+                    }
+
+                }
+                //if not...
+                else
+                {
+                    //draw regular game screen
+                    testScene.Draw(spriteBatch, isPaused);
+                    spriteBatch.DrawString(font, "Press P to Pause", new Vector2(300, 280), Color.White);
+                }
+            }
+
+            //Game Over Screen
+            if (screenCurrent == Scenes.GameOver)
+            {
+                //Game Over screen drawn here
+                spriteBatch.Draw(gameOver, visibleScreen, Color.White);
+                
+            }
             spriteBatch.End();
             //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
 

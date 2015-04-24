@@ -16,6 +16,7 @@ namespace Project2_FinalFramework
         EXAMPLE_Enemy enemy;
         private Texture2D t2d_PlayerAndEnemy;
         private Texture2D t2d_Wall;
+        bool isDead = false;
 
 
         //[Cosntructor]
@@ -30,7 +31,7 @@ namespace Project2_FinalFramework
         }
 
         //Startup()
-        protected override void Startup()
+        public override void Startup()
         {
             //(Re)Defining the game objects so that they start in their original positions
             player = new EXAMPLE_Player(400, 300, t2d_PlayerAndEnemy, 32, 32);
@@ -39,6 +40,7 @@ namespace Project2_FinalFramework
             listWalls.Add(new EXAMPLE_Wall(400, 364, t2d_Wall, 32, 32));
             listWalls.Add(new EXAMPLE_Wall(336, 300, t2d_Wall, 32, 32));
             enemy = new EXAMPLE_Enemy(600, 450, t2d_PlayerAndEnemy, 32, 32);
+            isDead = false;
         }
 
         //Update()                  == 1st METHOD CALLED -in- GAME LOOP
@@ -51,6 +53,15 @@ namespace Project2_FinalFramework
             foreach (EXAMPLE_Wall wall in listWalls)
             {
                 wall.Update(gameTime);
+            }
+
+            if(player.Position.X < 0 || player.Position.Y < 0 || player.Position.X > 800 || player.Position.Y > 600)
+            {
+                isDead = true;
+            }
+            else
+            {
+                isDead = false;
             }
         }
 
@@ -101,6 +112,26 @@ namespace Project2_FinalFramework
                 Rectangle.Intersect(ref rectPlayer, ref rectEnemy, out rectCollision);
                 player.ProcessCollision(rectCollision, hitboxesEnemy[0].Type);
             }
+        }
+
+        internal void Draw(SpriteBatch spriteBatch, bool paused)
+        {
+            if (paused == false)
+            {
+                //Drawing all of the objects (bottom-to-top)
+                foreach (EXAMPLE_Wall wall in listWalls)
+                {
+                    wall.Draw(spriteBatch);
+                }
+
+                enemy.Draw(spriteBatch);
+                player.Draw(spriteBatch);
+            }
+        }
+
+        public bool IsDead
+        {
+            get { return isDead; }
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Project2_FinalFramework
         }
 
         //Startup()
-        protected override void Startup()
+        public override void Startup()
         {
             throw new NotImplementedException();
         }
