@@ -40,6 +40,7 @@
     <Compile Include="EXAMPLE_Scene1.cs" />
     <Compile Include="EXAMPLE_Wall.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="GO_Enemy.cs" />
     <Compile Include="GO_Platform.cs" />
     <Compile Include="GO_Player.cs" />
     <Compile Include="Hitbox.cs" />
@@ -70,6 +71,9 @@
   <ItemGroup>
     <Content Include="..\..\..\..\..\..\..\Program Files %28x86%29\MonoGame\v3.0\Assemblies\WindowsGL\SDL.dll">
       <Link>SDL.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\enemyingame.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Humanoid0.png">
