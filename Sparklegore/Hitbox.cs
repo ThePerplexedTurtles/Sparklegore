@@ -11,11 +11,12 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace Project2_FinalFramework
+namespace Sparklegore
 {
     //Enum "CollisionType" starts
     public enum CollisionType
     {
+        Null,
         Platform,
         Player,
         Enemy1,
@@ -63,7 +64,7 @@ namespace Project2_FinalFramework
             get { return rectangleCurrent; }
         }
 
-        //COLLISION TYPe
+        //COLLISION TYPE
         public CollisionType Type
         {
             get { return collisionType; }

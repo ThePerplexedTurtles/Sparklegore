@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 
-namespace Project2_FinalFramework
+namespace Sparklegore
 {
     abstract class Scene
     {
@@ -29,7 +29,7 @@ namespace Project2_FinalFramework
         }
 
         //Startup() -- Used to (re)define the game objects back to their original states & positions
-        abstract protected void Startup();
+        abstract public void Startup();
 
         //RequestReset() -- Used to request a reset of the scene by changing the 'ResetRequested' boolean to 'true'
         public void RequestReset()

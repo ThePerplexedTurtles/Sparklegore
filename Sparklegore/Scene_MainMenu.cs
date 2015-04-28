@@ -12,13 +12,16 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
 
-namespace Project2_FinalFramework
+namespace Sparklegore
 {
     class Scene_MainMenu : Scene
     {
         //Attributes
-
+        Texture2D mainMenu;
+        Rectangle visibleScreen = new Rectangle(0, 0, 800, 600);
+        
 
         //[Constructor]
         public Scene_MainMenu(ContentManager cont) : base(cont)
@@ -27,27 +30,28 @@ namespace Project2_FinalFramework
         }
 
         //Startup()
-        protected override void Startup()
+        public override void Startup()
         {
-            throw new NotImplementedException();
+            mainMenu = this.Content.Load<Texture2D>("TitleScreen");
         }
 
         //Update()
         public override void Update(GameTime gameTime)
         {
-            throw new NotImplementedException();
+            
         }
 
         //Draw()
         public override void Draw(SpriteBatch spriteBatch)
         {
-            throw new NotImplementedException();
+            //
+            spriteBatch.Draw(mainMenu, visibleScreen, Color.White);
         }
 
         //DetectCollisions()
         public override void DetectCollisions()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
