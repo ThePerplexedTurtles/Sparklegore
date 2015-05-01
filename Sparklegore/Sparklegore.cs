@@ -1,6 +1,7 @@
 ﻿#region Contributors
 /* Authors:
  * - Michael Berger
+ * - Lucas Hedrick
  * - 
  */
 #endregion
@@ -16,7 +17,7 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
 #endregion
 
-namespace Project2_FinalFramework
+namespace Sparklegore
 {
     //Enum "Screens" starts
     public enum Scenes
@@ -27,7 +28,7 @@ namespace Project2_FinalFramework
     }
     //Enum "Screens" ends
 
-    //Menu enum
+    //Enum "Menus" starts
     public enum Menus
     {
         Options,
@@ -36,6 +37,8 @@ namespace Project2_FinalFramework
         Abilities,
         Default
     }
+    //Enum "Menus" ends
+
 
     //Class "Sparklegore" starts
     public class Sparklegore : Game
@@ -48,10 +51,12 @@ namespace Project2_FinalFramework
         private static KeyboardState stateKeyboardPrevious;
         private static MouseState stateMouseCurrent;
         private static MouseState stateMousePrevious;
-        public static Menus menuCurrent = Menus.Default;
-
+        private Scene_MainMenu sceneMainMenu;
+        private Scene_Game sceneGame;
+        private Scene_GameOver sceneGameOver;
+        
         //Luke's added mess
-        bool isPaused = true;
+        public static bool isPaused = true;
         bool someBool = true;
         Texture2D mainMenu;
         Texture2D pauseMenu;
@@ -63,12 +68,14 @@ namespace Project2_FinalFramework
         Texture2D controls;
         Texture2D gameOver;
         Rectangle visibleScreen = new Rectangle(0, 0, 800, 600);
-        bool onMain = true;
-        bool isDead = false;
-
-        //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
-        EXAMPLE_Scene1 testScene;
-        //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
+        public static bool onMain = true;
+        public static bool isDead = false;
+        public static Menus menuCurrent = Menus.Default;
+        Texture2D bg;
+        Vector2 position = new Vector2(0, 0);
+        Point currentFrame;
+        Point size = new Point(800, 600);
+        
 
         //[Constructor]
         public Sparklegore()
@@ -87,17 +94,23 @@ namespace Project2_FinalFramework
             stateKeyboardPrevious = Keyboard.GetState();
             stateMouseCurrent = Mouse.GetState();
             stateMousePrevious = Mouse.GetState();
+            
+            //set beginning of background looping
+            currentFrame.X = 0;
+            currentFrame.Y = 0;
 
             //Making the mouse visible
             this.IsMouseVisible = true;
 
-            //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
+            //Setting the window width and height
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 600;
 
-            testScene = new EXAMPLE_Scene1(this.Content);
-            //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
+            //Defining the various scenes
+            sceneGame = new Scene_Game(this.Content);
             mMenu = new Scene_MainMenu(this.Content);
+            
+
 
             base.Initialize();
         }
@@ -108,7 +121,6 @@ namespace Project2_FinalFramework
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
             //Luke's added mess
             mainMenu = this.Content.Load<Texture2D>("TitleScreen");
             pauseMenu = this.Content.Load<Texture2D>("Possible menu style1");
@@ -118,6 +130,7 @@ namespace Project2_FinalFramework
             settings = this.Content.Load<Texture2D>("Settings");
             options = this.Content.Load<Texture2D>("Options");
             gameOver = this.Content.Load<Texture2D>("GameOver");
+            bg = this.Content.Load<Texture2D>("background");
         }
 
         //UnloadContent()
@@ -136,19 +149,20 @@ namespace Project2_FinalFramework
             stateKeyboardCurrent = Keyboard.GetState();
             stateMouseCurrent = Mouse.GetState();
 
-            //QUICK ESCAPE
-            if (stateKeyboardCurrent.IsKeyDown(Keys.Space))
-            {
-                Exit();
-            }
-
-            if(testScene.IsDead == true)
+            //LUKES REALLY MESSY STUFF
+            if(sceneGame.IsDead == true)
             {
                 screenCurrent = Scenes.GameOver;
             }
 
             //Luke's added mess
             mMenu.Update(gameTime);
+
+            currentFrame.Y -= 1;
+            if(currentFrame.Y == -1)
+            {
+                currentFrame.Y = 3600;
+            }
 
             //Main menu navigation
             if (screenCurrent == Scenes.MainMenu)
@@ -212,8 +226,8 @@ namespace Project2_FinalFramework
                 //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
                 if (isPaused == false)
                 {
-                    testScene.Update(gameTime);
-                    testScene.DetectCollisions();
+                    sceneGame.Update(gameTime);
+                    sceneGame.DetectCollisions();
                 }
                 //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
 
@@ -293,7 +307,7 @@ namespace Project2_FinalFramework
                 
                 if(stateMouseCurrent.Y >= 132 && stateMouseCurrent.Y <= 186 && stateMouseCurrent.X >= 266 && stateMouseCurrent.X <= 563 && stateMouseCurrent.LeftButton == ButtonState.Pressed)
                 {
-                    testScene.Startup();
+                    sceneGame.Startup();
                     onMain = true;
                     screenCurrent = Scenes.MainMenu;
                     menuCurrent = Menus.Default;
@@ -303,6 +317,7 @@ namespace Project2_FinalFramework
                     Environment.Exit(0);
                 }
             }
+            //LUKES REALLY MESSY STUFF
 
             //Setting the previous input states to what were the current states
             stateKeyboardPrevious = stateKeyboardCurrent;
@@ -319,8 +334,11 @@ namespace Project2_FinalFramework
 
             // TODO: Add your drawing code here
 
-            //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
+            //Beginning the sprite batch
             spriteBatch.Begin();
+
+            spriteBatch.Draw(bg, position, new Rectangle(currentFrame.X, currentFrame.Y, size.X, size.Y), Color.White);
+
             //Main Menu
             if (screenCurrent == Scenes.MainMenu)
             {
@@ -377,7 +395,7 @@ namespace Project2_FinalFramework
                 else
                 {
                     //draw regular game screen
-                    testScene.Draw(spriteBatch, isPaused);
+                    sceneGame.Draw(spriteBatch);
                     spriteBatch.DrawString(font, "Press P to Pause", new Vector2(300, 280), Color.White);
                 }
             }
@@ -389,8 +407,10 @@ namespace Project2_FinalFramework
                 spriteBatch.Draw(gameOver, visibleScreen, Color.White);
                 
             }
+
+            //Ending the sprite batch
             spriteBatch.End();
-            //EXAMPLE CODE ::: EXAMPLE CODE ::: EXAMPLE CODE
+            
 
             base.Draw(gameTime);
         }

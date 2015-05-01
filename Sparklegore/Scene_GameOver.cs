@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 
-namespace Project2_FinalFramework
+namespace Sparklegore
 {
     class Scene_GameOver: Scene
     {

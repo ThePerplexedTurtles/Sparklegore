@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 #endregion
 
-namespace Project2_FinalFramework
+namespace Sparklegore
 {
 #if WINDOWS || LINUX
     /// <summary>
