@@ -122,7 +122,7 @@ namespace Sparklegore
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Luke's added mess
-            mainMenu = this.Content.Load<Texture2D>("TitleScreen");
+            mainMenu = this.Content.Load<Texture2D>("TitleScreen1");
             pauseMenu = this.Content.Load<Texture2D>("Possible menu style1");
             font = this.Content.Load<SpriteFont>("font1");
             controls = this.Content.Load<Texture2D>("Controls");
@@ -168,7 +168,7 @@ namespace Sparklegore
             if (screenCurrent == Scenes.MainMenu)
             {
                 //Play button
-                if (stateMouseCurrent.Y >= 394 && stateMouseCurrent.Y <= 429 && stateMouseCurrent.X >= 334 && stateMouseCurrent.X <= 446 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released)
+                if (stateMouseCurrent.Y >= 164 && stateMouseCurrent.Y <= 225 && stateMouseCurrent.X >= 317 && stateMouseCurrent.X <= 500 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released)
                 {
                     if (menuCurrent == Menus.Default)
                     {
@@ -177,39 +177,41 @@ namespace Sparklegore
                         onMain = true;
                         screenCurrent = Scenes.Game;
                     }
-                    else
-                    {
-                        onMain = true;
-                        menuCurrent = Menus.Default;
-                    }
                 }
 
                 //Options button
-                else if (stateMouseCurrent.Y >= 141 && stateMouseCurrent.Y <= 176 && stateMouseCurrent.X >= 347 && stateMouseCurrent.X <= 446 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
+                else if (stateMouseCurrent.Y >= 269 && stateMouseCurrent.Y <= 311 && stateMouseCurrent.X >= 318 && stateMouseCurrent.X <= 498 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
                 {
                     onMain = false;
                     menuCurrent = Menus.Options;
                 }
 
                 //Settings button
-                else if (stateMouseCurrent.Y >= 177 && stateMouseCurrent.Y <= 212 && stateMouseCurrent.X >= 348 && stateMouseCurrent.X <= 447 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
+                else if (stateMouseCurrent.Y >= 314 && stateMouseCurrent.Y <= 357 && stateMouseCurrent.X >= 307 && stateMouseCurrent.X <= 509 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
                 {
                     onMain = false;
                     menuCurrent = Menus.Settings;
                 }
 
                 //Controls button
-                else if (stateMouseCurrent.Y >= 212 && stateMouseCurrent.Y <= 247 && stateMouseCurrent.X >= 349 && stateMouseCurrent.X <= 448 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
+                else if (stateMouseCurrent.Y >= 361 && stateMouseCurrent.Y <= 400 && stateMouseCurrent.X >= 307 && stateMouseCurrent.X <= 509 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
                 {
                     onMain = false;
                     menuCurrent = Menus.Controls;
                 }
 
                 //Abilities button
-                else if (stateMouseCurrent.Y >= 247 && stateMouseCurrent.Y <= 282 && stateMouseCurrent.X >= 351 && stateMouseCurrent.X <= 455 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
+                else if (stateMouseCurrent.Y >= 404 && stateMouseCurrent.Y <= 444 && stateMouseCurrent.X >= 310 && stateMouseCurrent.X <= 506 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
                 {
                     onMain = false;
                     menuCurrent = Menus.Abilities;
+                }
+
+                //Resume
+                else if (stateMouseCurrent.Y >= 394 && stateMouseCurrent.Y <= 429 && stateMouseCurrent.X >= 334 && stateMouseCurrent.X <= 446 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == false)
+                {
+                    onMain = true;
+                    menuCurrent = Menus.Default;
                 }
 
                 //Quick Play

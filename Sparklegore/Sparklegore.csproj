@@ -97,7 +97,7 @@
     <Content Include="Content\Settings.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\TitleScreen.png">
+    <Content Include="Content\TitleScreen1.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Wall.png">
