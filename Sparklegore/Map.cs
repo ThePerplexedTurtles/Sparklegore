@@ -19,7 +19,7 @@ namespace Sparklegore
         Texture2D platformImage;
         private int platformWidth;
         private int platformHeight;
-
+        int distanceCount = 0;
         // constr. that takes and sets default platform image, width, and height from the platform gameobject  
         public Map(Texture2D tempPlatformImage, int tempPlatformWidth, int tempPlatformHeight)
         {
@@ -83,28 +83,44 @@ namespace Sparklegore
 
         public void Generate(List<Rectangle> list, int platformSpeed)
         {
-            
 
-            const int height = 600;
+
+
+
+            const int HEIGHT = 600;
             int moveRate = platformSpeed;
+            const int TOGENERATECOUNT = 100;
+            const int WIDTH = 800;
 
             List<Rectangle> tempList = new List<Rectangle>();
 
             foreach (Rectangle platform in list)
             {
                 // check if platform moved off screen
-                if (platform.Y + moveRate < height + 64)
+                if (platform.Y + moveRate < HEIGHT + 64)
                 {
                     tempList.Add(new Rectangle(platform.X, (platform.Y + moveRate), platform.Width, platform.Height));
                 }
-                // move platform to top becayse it is off the screen
-                else
+                // move platform to top because it is off the screen with random loaction
+
+
+                if (distanceCount > TOGENERATECOUNT)
                 {
-                    tempList.Add(new Rectangle(platform.X, 0 , platform.Width, platform.Height));
+                    int baseX = 0;
+                    Random ran = new Random();
+                    baseX = ran.Next(0, WIDTH);
+
+                    tempList.Add(new Rectangle(baseX, 0, list[0].Width, list[0].Height));
+                    tempList.Add(new Rectangle(baseX + (list[0].Width), 0, list[0].Width, list[0].Height));
+                    tempList.Add(new Rectangle(baseX + (list[0].Width * 2), 0, list[0].Width, list[0].Height));
+                    tempList.Add(new Rectangle(baseX + (list[0].Width * 3), 0, list[0].Width, list[0].Height));
+                    tempList.Add(new Rectangle(baseX + (list[0].Width * 4), 0, list[0].Width, list[0].Height));
+                    distanceCount = 0;
                 }
-                
             }
 
+
+            distanceCount++;
             Platforms = tempList;
         }
         // testing method (see if I didn't mess this up)
