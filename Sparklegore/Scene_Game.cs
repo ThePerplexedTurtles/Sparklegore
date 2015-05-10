@@ -24,6 +24,7 @@ namespace Sparklegore
         List<GO_Platform> listPlatforms = new List<GO_Platform>();
         List<GO_Enemy1> listEnemies = new List<GO_Enemy1>();
         GO_Player player;
+        EnemyGenerator enemyGenerator;
         Random random = new Random();
         bool isDead;
         Map map;
@@ -70,8 +71,10 @@ namespace Sparklegore
             //Creating the player
             player = new GO_Player(reader.PlatFormSpeed, 100, 132, t2d_Humanoids, 50, 46);
 
-            //Creating enemies
-            //listEnemies.Add(new GO_Enemy1(reader.PlatFormSpeed, map.Platforms[12].X, map.Platforms[12].Y, t2d_Enemy, 40, 40));
+            //Creating the enemy generator
+            List<Texture2D> enemySpritesheets = new List<Texture2D>();
+            enemySpritesheets.Add(t2d_Enemy);
+            enemyGenerator = new EnemyGenerator(enemySpritesheets, reader.PlatFormSpeed, map.Platforms);
 
             //Setting the 'is dead' variable to false
             isDead = false;
@@ -97,7 +100,7 @@ namespace Sparklegore
             player.Update(gameTime);
 
             //Determining if the player is dead
-            if(player.Position.X < 0 || player.Position.Y < 0 || player.Position.X > 800 || player.Position.Y > 600)
+            if(player.Position.X < -60 || player.Position.Y < -60 || player.Position.X > 800 || player.Position.Y > 600)
             {
                 isDead = true;
                 map.Platforms.Clear();
@@ -105,6 +108,10 @@ namespace Sparklegore
 
             //generate new platforms
             map.Generate(map.Platforms, reader.PlatFormSpeed);
+
+            //Updating the enemy generator
+            enemyGenerator.UpdatePlatformList(map.Platforms);
+            enemyGenerator.Update(gameTime);
 
             // clear the wall list so we can update it with new platforms
             listPlatforms.Clear();
@@ -132,6 +139,9 @@ namespace Sparklegore
                 {
                     listPlatforms[num].Draw(spriteBatch);
                 }
+
+                //Drawing the enemies
+                enemyGenerator.Draw(spriteBatch);
 
                 //Drawing the player
                 player.Draw(spriteBatch);

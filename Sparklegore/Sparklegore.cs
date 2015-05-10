@@ -71,6 +71,12 @@ namespace Sparklegore
         public static bool onMain = true;
         public static bool isDead = false;
         public static Menus menuCurrent = Menus.Default;
+        int hoveringSprite = 0;
+        Texture2D bg;
+        Vector2 position = new Vector2(0, 0);
+        Point currentFrame;
+        Point size = new Point(800, 600);
+        Texture2D menuSprites;
         
 
         //[Constructor]
@@ -90,6 +96,10 @@ namespace Sparklegore
             stateKeyboardPrevious = Keyboard.GetState();
             stateMouseCurrent = Mouse.GetState();
             stateMousePrevious = Mouse.GetState();
+            
+            //set beginning of background looping
+            currentFrame.X = 0;
+            currentFrame.Y = 0;
 
             //Making the mouse visible
             this.IsMouseVisible = true;
@@ -114,7 +124,7 @@ namespace Sparklegore
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Luke's added mess
-            mainMenu = this.Content.Load<Texture2D>("TitleScreen");
+            mainMenu = this.Content.Load<Texture2D>("TitleScreen1");
             pauseMenu = this.Content.Load<Texture2D>("Possible menu style1");
             font = this.Content.Load<SpriteFont>("font1");
             controls = this.Content.Load<Texture2D>("Controls");
@@ -122,6 +132,8 @@ namespace Sparklegore
             settings = this.Content.Load<Texture2D>("Settings");
             options = this.Content.Load<Texture2D>("Options");
             gameOver = this.Content.Load<Texture2D>("GameOver");
+            bg = this.Content.Load<Texture2D>("background");
+            menuSprites = this.Content.Load<Texture2D>("menuSpriteSheet");
         }
 
         //UnloadContent()
@@ -149,52 +161,90 @@ namespace Sparklegore
             //Luke's added mess
             mMenu.Update(gameTime);
 
+            currentFrame.Y -= 1;
+            if(currentFrame.Y == -1)
+            {
+                currentFrame.Y = 3600;
+            }
+
             //Main menu navigation
             if (screenCurrent == Scenes.MainMenu)
             {
                 //Play button
-                if (stateMouseCurrent.Y >= 394 && stateMouseCurrent.Y <= 429 && stateMouseCurrent.X >= 334 && stateMouseCurrent.X <= 446 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released)
+                if (stateMouseCurrent.Y >= 164 && stateMouseCurrent.Y <= 225 && stateMouseCurrent.X >= 317 && stateMouseCurrent.X <= 500)
                 {
-                    if (menuCurrent == Menus.Default)
+                    hoveringSprite = 1;
+                    if (stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released)
                     {
-                        isPaused = false;
-                        IsMouseVisible = false;
-                        onMain = true;
-                        screenCurrent = Scenes.Game;
+                        if (menuCurrent == Menus.Default)
+                        {
+                            isPaused = false;
+                            IsMouseVisible = false;
+                            onMain = true;
+                            screenCurrent = Scenes.Game;
+                        }
                     }
-                    else
+                }
+
+                //Options button
+                else if (stateMouseCurrent.Y >= 269 && stateMouseCurrent.Y <= 311 && stateMouseCurrent.X >= 318 && stateMouseCurrent.X <= 498 && onMain == true)
+                {
+                    hoveringSprite = 2;
+                    if (stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released)
+                    {
+                        onMain = false;
+                        menuCurrent = Menus.Options;
+                    }
+                }
+
+                //Settings button
+                else if (stateMouseCurrent.Y >= 314 && stateMouseCurrent.Y <= 357 && stateMouseCurrent.X >= 307 && stateMouseCurrent.X <= 509 && onMain == true)
+                {
+                    hoveringSprite = 3;
+                    if (stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released)
+                    {
+                        onMain = false;
+                        menuCurrent = Menus.Settings;
+                    }
+                }
+
+                //Controls button
+                else if (stateMouseCurrent.Y >= 361 && stateMouseCurrent.Y <= 400 && stateMouseCurrent.X >= 307 && stateMouseCurrent.X <= 509 && onMain == true)
+                {
+                    hoveringSprite = 4;
+                    if (stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released)
+                    {
+                        onMain = false;
+                        menuCurrent = Menus.Controls;
+                    }
+                }
+
+                //Abilities button
+                else if (stateMouseCurrent.Y >= 404 && stateMouseCurrent.Y <= 444 && stateMouseCurrent.X >= 310 && stateMouseCurrent.X <= 506 && onMain == true)
+                {
+                    hoveringSprite = 5;
+                    if (stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released)
+                    {
+                        onMain = false;
+                        menuCurrent = Menus.Abilities;
+                    }
+                }
+
+                //Resume
+                else if (stateMouseCurrent.Y >= 394 && stateMouseCurrent.Y <= 429 && stateMouseCurrent.X >= 334 && stateMouseCurrent.X <= 446 && onMain == false)
+                {
+                    hoveringSprite = 11;
+                    if (stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released)
                     {
                         onMain = true;
                         menuCurrent = Menus.Default;
                     }
                 }
 
-                //Options button
-                else if (stateMouseCurrent.Y >= 141 && stateMouseCurrent.Y <= 176 && stateMouseCurrent.X >= 347 && stateMouseCurrent.X <= 446 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
+                //turn off hover
+                else
                 {
-                    onMain = false;
-                    menuCurrent = Menus.Options;
-                }
-
-                //Settings button
-                else if (stateMouseCurrent.Y >= 177 && stateMouseCurrent.Y <= 212 && stateMouseCurrent.X >= 348 && stateMouseCurrent.X <= 447 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
-                {
-                    onMain = false;
-                    menuCurrent = Menus.Settings;
-                }
-
-                //Controls button
-                else if (stateMouseCurrent.Y >= 212 && stateMouseCurrent.Y <= 247 && stateMouseCurrent.X >= 349 && stateMouseCurrent.X <= 448 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
-                {
-                    onMain = false;
-                    menuCurrent = Menus.Controls;
-                }
-
-                //Abilities button
-                else if (stateMouseCurrent.Y >= 247 && stateMouseCurrent.Y <= 282 && stateMouseCurrent.X >= 351 && stateMouseCurrent.X <= 455 && stateMouseCurrent.LeftButton == ButtonState.Pressed && stateMousePrevious.LeftButton == ButtonState.Released && onMain == true)
-                {
-                    onMain = false;
-                    menuCurrent = Menus.Abilities;
+                    hoveringSprite = 0;
                 }
 
                 //Quick Play
@@ -247,40 +297,66 @@ namespace Sparklegore
                 if (isPaused == true)
                 {
                     //resumes game
-                    if (stateMouseCurrent.Y >= 394 && stateMouseCurrent.Y <= 429 && stateMouseCurrent.X >= 334 && stateMouseCurrent.X <= 446 && stateMouseCurrent.LeftButton == ButtonState.Pressed && !(stateMousePrevious.LeftButton == ButtonState.Pressed))
+                    if (stateMouseCurrent.Y >= 394 && stateMouseCurrent.Y <= 429 && stateMouseCurrent.X >= 334 && stateMouseCurrent.X <= 446)
                     {
-                        if (menuCurrent == Menus.Default)
+                        hoveringSprite = 10;
+                        if (stateMouseCurrent.LeftButton == ButtonState.Pressed && !(stateMousePrevious.LeftButton == ButtonState.Pressed))
                         {
-                            isPaused = false;
-                            IsMouseVisible = false;
-                            someBool = true;
-                        }
-                        else
-                        {
-                            menuCurrent = Menus.Default;
+                            if (menuCurrent == Menus.Default)
+                            {
+                                isPaused = false;
+                                IsMouseVisible = false;
+                                someBool = true;
+                            }
+                            else
+                            {
+                                menuCurrent = Menus.Default;
+                            }
                         }
                     }
 
                     //Options submenu
-                    if (stateMouseCurrent.Y >= 145 && stateMouseCurrent.Y <= 175 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445 && stateMouseCurrent.LeftButton == ButtonState.Pressed)
+                    else if (stateMouseCurrent.Y >= 145 && stateMouseCurrent.Y <= 175 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445)
                     {
-                        menuCurrent = Menus.Options;
+                        hoveringSprite = 6;
+                        if (stateMouseCurrent.LeftButton == ButtonState.Pressed && !(stateMousePrevious.LeftButton == ButtonState.Pressed))
+                        {
+                            menuCurrent = Menus.Options;
+                        }
                     }
 
                     //Settings submenu
-                    if (stateMouseCurrent.Y >= 180 && stateMouseCurrent.Y <= 212 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445 && stateMouseCurrent.LeftButton == ButtonState.Pressed)
+                    else if (stateMouseCurrent.Y >= 180 && stateMouseCurrent.Y <= 212 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445)
                     {
-                        menuCurrent = Menus.Settings;
+                        hoveringSprite = 7;
+                        if (stateMouseCurrent.LeftButton == ButtonState.Pressed && !(stateMousePrevious.LeftButton == ButtonState.Pressed))
+                        {
+                            menuCurrent = Menus.Settings;
+                        }
                     }
                     //Controls submenu
-                    if (stateMouseCurrent.Y >= 215 && stateMouseCurrent.Y <= 245 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445 && stateMouseCurrent.LeftButton == ButtonState.Pressed)
+                    else if (stateMouseCurrent.Y >= 215 && stateMouseCurrent.Y <= 245 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445)
                     {
-                        menuCurrent = Menus.Controls;
+                        hoveringSprite = 8;
+                        if (stateMouseCurrent.LeftButton == ButtonState.Pressed && !(stateMousePrevious.LeftButton == ButtonState.Pressed))
+                        {
+                            menuCurrent = Menus.Controls;
+                        }
                     }
                     //Abilities submenu
-                    if (stateMouseCurrent.Y >= 250 && stateMouseCurrent.Y <= 280 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445 && stateMouseCurrent.LeftButton == ButtonState.Pressed)
+                    else if (stateMouseCurrent.Y >= 250 && stateMouseCurrent.Y <= 280 && stateMouseCurrent.X >= 350 && stateMouseCurrent.X <= 445)
                     {
-                        menuCurrent = Menus.Abilities;
+                        hoveringSprite = 9;
+                        if (stateMouseCurrent.LeftButton == ButtonState.Pressed && !(stateMousePrevious.LeftButton == ButtonState.Pressed))
+                        {
+                            menuCurrent = Menus.Abilities;
+                        }
+                    }
+
+                    //turn off hover
+                    else
+                    {
+                        hoveringSprite = 0;
                     }
                 }
             }
@@ -321,7 +397,9 @@ namespace Sparklegore
 
             //Beginning the sprite batch
             spriteBatch.Begin();
-            
+
+            spriteBatch.Draw(bg, position, new Rectangle(currentFrame.X, currentFrame.Y, size.X, size.Y), Color.White);
+
             //Main Menu
             if (screenCurrent == Scenes.MainMenu)
             {
@@ -335,6 +413,26 @@ namespace Sparklegore
                         break;
                     case Menus.Default:
                         spriteBatch.Draw(mainMenu, visibleScreen, Color.White);
+                        switch(hoveringSprite)
+                        {
+                            case 0:
+                                break;
+                            case 1:
+                                spriteBatch.Draw(menuSprites, new Rectangle(280, 67, 256, 256), new Rectangle(0, 0, 256,256), Color.White);
+                                break;
+                            case 2:
+                                spriteBatch.Draw(menuSprites, new Rectangle(280, 161, 256, 256), new Rectangle(0, 256, 256, 256), Color.White);
+                                break;
+                            case 3:
+                                spriteBatch.Draw(menuSprites, new Rectangle(281, 208, 256, 256), new Rectangle(0, 512, 256, 256), Color.White);
+                                break;
+                            case 4:
+                                spriteBatch.Draw(menuSprites, new Rectangle(280, 243, 256, 256), new Rectangle(0, 758, 256, 256), Color.White);
+                                break;
+                            case 5:
+                                spriteBatch.Draw(menuSprites, new Rectangle(280, 296, 256, 256), new Rectangle(256, 0, 256, 256), Color.White);
+                                break;
+                        }
                         break;
                     case Menus.Options:
                         spriteBatch.Draw(options, visibleScreen, Color.White);
@@ -364,6 +462,26 @@ namespace Sparklegore
                             spriteBatch.Draw(pauseMenu, visibleScreen, Color.White);
                             spriteBatch.DrawString(font, "Can Currently Only", new Vector2(50, 50), Color.White);
                             spriteBatch.DrawString(font, "Look At All Menus", new Vector2(50, 70), Color.White);
+                            switch (hoveringSprite)
+                            {
+                                case 0:
+                                    break;
+                                case 6:
+                                    spriteBatch.Draw(menuSprites, new Rectangle(268, 28, 256, 256), new Rectangle(256, 256, 256, 256), Color.White);
+                                    break;
+                                case 7:
+                                    spriteBatch.Draw(menuSprites, new Rectangle(277, 69, 256, 256), new Rectangle(256, 512, 256, 256), Color.White);
+                                    break;
+                                case 8:
+                                    spriteBatch.Draw(menuSprites, new Rectangle(274, 89, 256, 256), new Rectangle(256, 758, 256, 256), Color.White);
+                                    break;
+                                case 9:
+                                    spriteBatch.Draw(menuSprites, new Rectangle(276, 134, 256, 256), new Rectangle(512, 0, 256, 256), Color.White);
+                                    break;
+                                case 10:
+                                    spriteBatch.Draw(menuSprites, new Rectangle(270, 295, 256, 256), new Rectangle(512, 256, 256, 256), Color.White);
+                                    break;
+                            }
                             break;
                         case Menus.Options:
                             spriteBatch.Draw(options, visibleScreen, Color.White);

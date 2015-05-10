@@ -256,12 +256,9 @@ namespace Sparklegore
 
             //Adding the Y velocity to the Y position
             v2_Position.Y += (float)doubleVelocityY;
-
-            //IF the player is NOT in the air...
-            if (boolIsInAir == false)
-            {
-                v2_Position.Y += intPlatformSpeed;
-            }
+            
+            //Moving the player down according to the platform speed
+            v2_Position.Y += intPlatformSpeed;
         }
 
         //MoveX()

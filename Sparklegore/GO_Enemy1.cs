@@ -19,6 +19,7 @@ namespace Sparklegore
     {
         //Attributes
         bool boolIsFacingLeft = true;
+        bool boolIsOffScreen = false;
         int intPlatformSpeed = 0;
 
 
@@ -56,13 +57,18 @@ namespace Sparklegore
         //Update()
         public override void Update(GameTime gameTime)
         {
-            //
+            //Moving the enemy down according to the global platform speed
             v2_Position.Y += intPlatformSpeed;
 
-            //if
-            if (v2_Position.Y >= 600)
+            //IF the enemy is off-screen...
+            if (v2_Position.Y > 600 + (v2_SpriteSize.Y * 1.5))
             {
-                v2_Position.Y = -64;
+                //Setting the 'is off screen' bool to true
+                boolIsOffScreen = true;
+
+                //Re-locating the enemy to a position that is out-of-reach of the player
+                v2_Position.Y = -200;
+                v2_Position.X = -200;
             }
 
             //Updating the hitboxes
@@ -112,6 +118,16 @@ namespace Sparklegore
             
         }
 
+        //Accessors & Modifiers
+        //::: ::: ::: ::: :::
 
+        //IS OFF SCREEN
+        public bool IsOffScreen
+        {
+            get { return boolIsOffScreen; }
+            set { boolIsOffScreen = value; }
+        }
+
+        //::: ::: ::: ::: :::
     }
 }
