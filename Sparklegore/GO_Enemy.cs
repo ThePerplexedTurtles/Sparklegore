@@ -17,41 +17,28 @@ namespace Project2_FinalFramework
     class GO_Enemy : GameObject
     {
         //attributes
-        private int walkSpeed;
+        private int walkSpeed = 10;
+        private int chargeSpeed = 20;
         private int knockbackDistance;
-        private bool isAlive;
-        private List<GO_Platform> listPlatforms;
-        private int patrolDistance;
         private enum enemyState { patrolLeft, patrolRight, chargeLeft, chargeRight, dead };
-        enemyState enemyMove;
+        enemyState enemyS = enemyState.patrolRight;
 
         //Constructor
-        public GO_Enemy(int x, int y, Texture2D sheet, int width, int height, List<GO_Platform> platformList)
+        public GO_Enemy(int x, int y, Texture2D sheet, int width, int height)
             : base(x, y, sheet, width, height)
         {
             //Setting the spritesheet location
             v2_SpriteSheetPos = new Vector2(1, 1);
-
-            listPlatforms = platformList;
-
             //Creating the hitbox
             listHitboxes.Add(new Hitbox(v2_Position, 6, 6, 24, 24, CollisionType.Enemy1));
+
         }
 
-        //AI loop
-        public void enemy_AI()
-        {
-            while (isAlive == true)
-            {
-
-            }
-        }
 
 
 
         public override void Update(GameTime gameTime)
         {
-            enemy_AI();
         }
 
         public override void Draw(SpriteBatch spriteBatch)

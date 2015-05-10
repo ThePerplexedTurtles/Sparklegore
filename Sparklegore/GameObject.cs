@@ -30,6 +30,12 @@ namespace Project2_FinalFramework
             v2_SpriteSheetPos = new Vector2(0, 0);
         }
 
+        //properties
+        public Vector2 V2_Pos
+        {
+            get { return v2_Position; }
+        }
+
         //Update()
         abstract public void Update(GameTime gameTime);
 

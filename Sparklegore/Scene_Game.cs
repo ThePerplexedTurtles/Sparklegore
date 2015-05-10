@@ -53,7 +53,7 @@ namespace Project2_FinalFramework
             player = new GO_Player(100, 100, t2d_Humanoids, 32, 32);
 
             //Creating the enemy
-            enemy = new GO_Enemy(50, 100, t2d_Enemy, 20, 20, listPlatforms);
+            enemy = new GO_Enemy(50, 100, t2d_Enemy, 20, 20);
         }
 
         //Update()
